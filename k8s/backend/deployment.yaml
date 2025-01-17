@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: backend
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: backend
@@ -18,27 +18,3 @@ spec:
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 3000
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: backend-service
-spec:
-  selector:
-    app: backend
-  ports:
-  - port: 80
-    targetPort: 3000
-  type: ClusterIP
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: backend-api-service
-spec:
-  selector:
-    app: backend
-  ports:
-  - port: 80
-    targetPort: 3000
-  type: LoadBalancer
