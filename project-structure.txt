@@ -1,0 +1,59 @@
+k8s-demo-project/
+│
+├── frontend/
+│   ├── src/
+│   │   ├── index.js          # React application entry point
+│   │   └── App.js            # Main React component with external API integration
+│   ├── public/
+│   │   └── index.html        # HTML template for React application
+│   ├── package.json          # Frontend dependencies and scripts
+│   ├── Dockerfile            # Frontend container configuration
+│   └── nginx.conf            # Nginx configuration for serving frontend
+│
+├── backend/
+│   ├── src/
+│   │   └── server.js         # Express server with protected API endpoints
+│   ├── package.json          # Backend dependencies and scripts
+│   └── Dockerfile            # Backend container configuration
+│
+└── k8s/                      # Kubernetes configuration files
+    ├── frontend/
+    │   ├── deployment.yaml   # Frontend deployment configuration
+    │   └── service.yaml      # Frontend service configuration
+    └── backend/
+        ├── deployment.yaml   # Backend deployment configuration
+        ├── service.yaml      # Internal service configuration
+        └── api-service.yaml  # External API service configuration
+
+Key Configuration Details:
+
+1. Frontend Configuration (frontend/nginx.conf):
+   - Serves static React application
+   - Proxies external API requests to backend service
+   - Handles SPA routing
+
+2. Backend Configuration (backend/src/server.js):
+   - Internal API endpoint (/api/internal/data)
+     * Restricted to command-line access
+     * Returns internal system data
+   - External API endpoint (/api/external/data)
+     * Restricted to web browser access
+     * Returns public data
+
+3. Kubernetes Services:
+   - frontend-service: ClusterIP for web application
+   - backend-service: ClusterIP for internal API
+   - backend-api-service: LoadBalancer for external API
+
+4. Container Images:
+   - k8s-frontend:latest
+   - k8s-backend:latest
+
+Access Methods:
+1. Frontend Application:
+   kubectl port-forward service/frontend-service 8080:80
+   Access via: http://localhost:8080
+
+2. Internal API (Command Line Only):
+   kubectl port-forward service/backend-service 3000:80
+   Invoke-RestMethod -Uri "http://localhost:3000/api/internal/data"
