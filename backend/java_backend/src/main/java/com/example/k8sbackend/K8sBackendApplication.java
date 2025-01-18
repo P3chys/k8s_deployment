@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class K8sBackendApplication {
     public static void main(String[] args) {
+        DatabaseConnection.extractSchemaJDBC();
         SpringApplication.run(K8sBackendApplication.class, args);
     }
 }
