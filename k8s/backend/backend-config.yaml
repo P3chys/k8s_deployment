@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-physical
+  labels:
+    app: backend
+    access: physical
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+      access: physical
+  template:
+    metadata:
+      labels:
+        app: backend
+        access: physical
+    spec:
+      containers:
+      - name: backend
+        image: docker.io/library/k8s-backend:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 3000
+        env:
+        - name: SERVER_PORT
+          value: "3000"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-machine
+  labels:
+    app: backend
+    access: machine
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+      access: machine
+  template:
+    metadata:
+      labels:
+        app: backend
+        access: machine
+    spec:
+      containers:
+      - name: backend
+        image: docker.io/library/k8s-backend:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 3000
+        env:
+        - name: SERVER_PORT
+          value: "3000"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-physical
+spec:
+  selector:
+    app: backend
+    access: physical
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-machine
+spec:
+  selector:
+    app: backend
+    access: machine
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+  type: ClusterIP

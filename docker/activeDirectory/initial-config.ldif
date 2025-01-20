@@ -1,0 +1,51 @@
+# initial-config.ldif
+# Base Organization Units
+dn: ou=users,dc=example,dc=com
+objectClass: organizationalUnit
+ou: users
+
+dn: ou=groups,dc=example,dc=com
+objectClass: organizationalUnit
+ou: groups
+
+# Physical Users Group
+dn: cn=physical_users,ou=groups,dc=example,dc=com
+objectClass: groupOfNames
+cn: physical_users
+description: Group for physical human users
+member: cn=john.smith,ou=users,dc=example,dc=com
+
+# Machine Users Group
+dn: cn=machine_users,ou=groups,dc=example,dc=com
+objectClass: groupOfNames
+cn: machine_users
+description: Group for machine/service accounts
+member: cn=app-server-01,ou=users,dc=example,dc=com
+
+# Example Physical User
+dn: cn=john.smith,ou=users,dc=example,dc=com
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+cn: john.smith
+sn: Smith
+givenName: John
+uid: jsmith
+mail: john.smith@example.com
+userPassword: password123
+title: Employee
+employeeType: Physical
+
+# Example Machine User
+dn: cn=app-server-01,ou=users,dc=example,dc=com
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+cn: app-server-01
+sn: Server
+givenName: AppServer01
+uid: app-server-01
+mail: app-server-01@example.com
+userPassword: password123
+title: Service Account
+employeeType: Machine
